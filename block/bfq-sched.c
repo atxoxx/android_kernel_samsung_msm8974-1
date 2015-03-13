@@ -97,8 +97,12 @@ static inline void bfq_update_budget(struct bfq_entity *next_in_service)
  * Shift for timestamp calculations.  This actually limits the maximum
  * service allowed in one timestamp delta (small shift values increase it),
  * the maximum total weight that can be used for the queues in the system
+<<<<<<< HEAD
  * (big shift values increase it), and the period of virtual time
  * wraparounds.
+=======
+ * (big shift values increase it), and the period of virtual time wraparounds.
+>>>>>>> 298f825... Add different shedulers like BFQ - ZEN - .....
  */
 #define WFQ_SERVICE_SHIFT	22
 
@@ -340,8 +344,12 @@ static void bfq_weights_tree_remove(struct bfq_data *bfqd,
 
 
 /**
+<<<<<<< HEAD
  * bfq_active_insert - insert an entity in the active tree of its
  *                     group/device.
+=======
+ * bfq_active_insert - insert an entity in the active tree of its group/device.
+>>>>>>> 298f825... Add different shedulers like BFQ - ZEN - .....
  * @st: the service tree of the entity.
  * @entity: the entity being inserted.
  *
@@ -397,9 +405,15 @@ static void bfq_active_insert(struct bfq_service_tree *st,
  * bfq_ioprio_to_weight - calc a weight from an ioprio.
  * @ioprio: the ioprio value to convert.
  */
+<<<<<<< HEAD
 static inline unsigned short bfq_ioprio_to_weight(int ioprio)
 {
 	BUG_ON(ioprio < 0 || ioprio >= IOPRIO_BE_NR);
+=======
+static unsigned short bfq_ioprio_to_weight(int ioprio)
+{
+	WARN_ON(ioprio < 0 || ioprio >= IOPRIO_BE_NR);
+>>>>>>> 298f825... Add different shedulers like BFQ - ZEN - .....
 	return IOPRIO_BE_NR - ioprio;
 }
 
@@ -411,9 +425,15 @@ static inline unsigned short bfq_ioprio_to_weight(int ioprio)
  * 0 is used as an escape ioprio value for weights (numerically) equal or
  * larger than IOPRIO_BE_NR
  */
+<<<<<<< HEAD
 static inline unsigned short bfq_weight_to_ioprio(int weight)
 {
 	BUG_ON(weight < BFQ_MIN_WEIGHT || weight > BFQ_MAX_WEIGHT);
+=======
+static unsigned short bfq_weight_to_ioprio(int weight)
+{
+	WARN_ON(weight < BFQ_MIN_WEIGHT || weight > BFQ_MAX_WEIGHT);
+>>>>>>> 298f825... Add different shedulers like BFQ - ZEN - .....
 	return IOPRIO_BE_NR - weight < 0 ? 0 : IOPRIO_BE_NR - weight;
 }
 
@@ -626,6 +646,7 @@ __bfq_entity_update_weight_prio(struct bfq_service_tree *old_st,
 		old_st->wsum -= entity->weight;
 
 		if (entity->new_weight != entity->orig_weight) {
+<<<<<<< HEAD
 			if (entity->new_weight < BFQ_MIN_WEIGHT ||
 			    entity->new_weight > BFQ_MAX_WEIGHT) {
 				printk(KERN_CRIT "update_weight_prio: "
@@ -637,6 +658,18 @@ __bfq_entity_update_weight_prio(struct bfq_service_tree *old_st,
 			entity->ioprio =
 				bfq_weight_to_ioprio(entity->orig_weight);
 		}
+=======
+			entity->orig_weight = entity->new_weight;
+			entity->ioprio =
+				bfq_weight_to_ioprio(entity->orig_weight);
+		} else if (entity->new_ioprio != entity->ioprio) {
+			entity->ioprio = entity->new_ioprio;
+			entity->orig_weight =
+					bfq_ioprio_to_weight(entity->ioprio);
+		} else
+			entity->new_weight = entity->orig_weight =
+				bfq_ioprio_to_weight(entity->ioprio);
+>>>>>>> 298f825... Add different shedulers like BFQ - ZEN - .....
 
 		entity->ioprio_class = entity->new_ioprio_class;
 		entity->ioprio_changed = 0;
@@ -684,8 +717,12 @@ __bfq_entity_update_weight_prio(struct bfq_service_tree *old_st,
 }
 
 /**
+<<<<<<< HEAD
  * bfq_bfqq_served - update the scheduler status after selection for
  *                   service.
+=======
+ * bfq_bfqq_served - update the scheduler status after selection for service.
+>>>>>>> 298f825... Add different shedulers like BFQ - ZEN - .....
  * @bfqq: the queue being served.
  * @served: bytes to transfer.
  *
@@ -824,7 +861,11 @@ static void bfq_activate_entity(struct bfq_entity *entity)
  * and if the caller did not specify @requeue, put it on the idle tree.
  *
  * Return %1 if the caller should update the entity hierarchy, i.e.,
+<<<<<<< HEAD
  * if the entity was in service or if it was the next_in_service for
+=======
+ * if the entity was under service or if it was the next_in_service for
+>>>>>>> 298f825... Add different shedulers like BFQ - ZEN - .....
  * its sched_data; return %0 otherwise.
  */
 static int __bfq_deactivate_entity(struct bfq_entity *entity, int requeue)
@@ -880,7 +921,11 @@ static void bfq_deactivate_entity(struct bfq_entity *entity, int requeue)
 			/*
 			 * The parent entity is still backlogged, and
 			 * we don't need to update it as it is still
+<<<<<<< HEAD
 			 * in service.
+=======
+			 * under service.
+>>>>>>> 298f825... Add different shedulers like BFQ - ZEN - .....
 			 */
 			break;
 
@@ -921,7 +966,11 @@ update:
  * active tree of the device is not empty.
  *
  * NOTE: this hierarchical implementation updates vtimes quite often,
+<<<<<<< HEAD
  * we may end up with reactivated processes getting timestamps after a
+=======
+ * we may end up with reactivated tasks getting timestamps after a
+>>>>>>> 298f825... Add different shedulers like BFQ - ZEN - .....
  * vtime skip done because we needed a ->first_active entity on some
  * intermediate node.
  */
@@ -944,8 +993,13 @@ static void bfq_update_vtime(struct bfq_service_tree *st)
  *
  * This function searches the first schedulable entity, starting from the
  * root of the tree and going on the left every time on this side there is
+<<<<<<< HEAD
  * a subtree with at least one eligible (start >= vtime) entity. The path on
  * the right is followed only if a) the left subtree contains no eligible
+=======
+ * a subtree with at least one eligible (start >= vtime) entity.  The path
+ * on the right is followed only if a) the left subtree contains no eligible
+>>>>>>> 298f825... Add different shedulers like BFQ - ZEN - .....
  * entities and b) no eligible entity has been found yet.
  */
 static struct bfq_entity *bfq_first_active_entity(struct bfq_service_tree *st)
@@ -1138,14 +1192,23 @@ static void bfq_del_bfqq_busy(struct bfq_data *bfqd, struct bfq_queue *bfqq,
 			BUG_ON(!bfqd->busy_in_flight_queues);
 			bfqd->busy_in_flight_queues--;
 			if (bfq_bfqq_constantly_seeky(bfqq)) {
+<<<<<<< HEAD
 				BUG_ON(!bfqd->
 					const_seeky_busy_in_flight_queues);
+=======
+				BUG_ON(
+				   !bfqd->const_seeky_busy_in_flight_queues);
+>>>>>>> 298f825... Add different shedulers like BFQ - ZEN - .....
 				bfqd->const_seeky_busy_in_flight_queues--;
 			}
 		}
 	}
 	if (bfqq->wr_coeff > 1)
+<<<<<<< HEAD
 		bfqd->wr_busy_queues--;
+=======
+		bfqd->raised_busy_queues--;
+>>>>>>> 298f825... Add different shedulers like BFQ - ZEN - .....
 
 	bfq_deactivate_bfqq(bfqd, bfqq, requeue);
 }
@@ -1176,5 +1239,9 @@ static void bfq_add_bfqq_busy(struct bfq_data *bfqd, struct bfq_queue *bfqq)
 		}
 	}
 	if (bfqq->wr_coeff > 1)
+<<<<<<< HEAD
 		bfqd->wr_busy_queues++;
+=======
+		bfqd->raised_busy_queues++;
+>>>>>>> 298f825... Add different shedulers like BFQ - ZEN - .....
 }

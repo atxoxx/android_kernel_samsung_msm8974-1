@@ -9,8 +9,12 @@
  *
  * Copyright (C) 2010 Paolo Valente <paolo.valente@unimore.it>
  *
+<<<<<<< HEAD
  * Licensed under the GPL-2 as detailed in the accompanying COPYING.BFQ
  * file.
+=======
+ * Licensed under the GPL-2 as detailed in the accompanying COPYING.BFQ file.
+>>>>>>> 298f825... Add different shedulers like BFQ - ZEN - .....
  */
 
 #ifdef CONFIG_CGROUP_BFQIO
@@ -72,12 +76,15 @@ static inline void bfq_group_init_entity(struct bfqio_cgroup *bgrp,
 		entity->new_weight = bfq_ioprio_to_weight(bgrp->ioprio);
 		entity->new_ioprio = bgrp->ioprio;
 	} else {
+<<<<<<< HEAD
 		if (bgrp->weight < BFQ_MIN_WEIGHT ||
 		    bgrp->weight > BFQ_MAX_WEIGHT) {
 			printk(KERN_CRIT "bfq_group_init_entity: "
 					 "bgrp->weight %d\n", bgrp->weight);
 			BUG();
 		}
+=======
+>>>>>>> 298f825... Add different shedulers like BFQ - ZEN - .....
 		entity->new_weight = bgrp->weight;
 		entity->new_ioprio = bfq_weight_to_ioprio(bgrp->weight);
 	}
@@ -143,9 +150,14 @@ static struct bfq_group *bfq_group_chain_alloc(struct bfq_data *bfqd,
 			bfq_group_set_parent(prev, bfqg);
 			/*
 			 * Build a list of allocated nodes using the bfqd
+<<<<<<< HEAD
 			 * filed, that is still unused and will be
 			 * initialized only after the node will be
 			 * connected.
+=======
+			 * filed, that is still unused and will be initialized
+			 * only after the node will be connected.
+>>>>>>> 298f825... Add different shedulers like BFQ - ZEN - .....
 			 */
 			prev->bfqd = bfqg;
 			prev = bfqg;
@@ -165,8 +177,12 @@ cleanup:
 }
 
 /**
+<<<<<<< HEAD
  * bfq_group_chain_link - link an allocated group chain to a cgroup
  *                        hierarchy.
+=======
+ * bfq_group_chain_link - link an allocated group chain to a cgroup hierarchy.
+>>>>>>> 298f825... Add different shedulers like BFQ - ZEN - .....
  * @bfqd: the queue descriptor.
  * @cgroup: the leaf cgroup to start from.
  * @leaf: the leaf group (to be associated to @cgroup).
@@ -439,8 +455,12 @@ static inline void bfq_reparent_leaf_entity(struct bfq_data *bfqd,
 }
 
 /**
+<<<<<<< HEAD
  * bfq_reparent_active_entities - move to the root group all active
  *                                entities.
+=======
+ * bfq_reparent_active_entities - move to the root group all active entities.
+>>>>>>> 298f825... Add different shedulers like BFQ - ZEN - .....
  * @bfqd: the device data structure with the root group.
  * @bfqg: the group to move from.
  * @st: the service tree with the entities.
@@ -485,8 +505,13 @@ static void bfq_destroy_group(struct bfqio_cgroup *bgrp, struct bfq_group *bfqg)
 	hlist_del(&bfqg->group_node);
 
 	/*
+<<<<<<< HEAD
 	 * Empty all service_trees belonging to this group before
 	 * deactivating the group itself.
+=======
+	 * Empty all service_trees belonging to this group before deactivating
+	 * the group itself.
+>>>>>>> 298f825... Add different shedulers like BFQ - ZEN - .....
 	 */
 	for (i = 0; i < BFQ_IOPRIO_CLASSES; i++) {
 		st = bfqg->sched_data.service_tree + i;
@@ -506,7 +531,11 @@ static void bfq_destroy_group(struct bfqio_cgroup *bgrp, struct bfq_group *bfqg)
 		 * all the leaf entities corresponding to these queues
 		 * to the root_group.
 		 * Also, it may happen that the group has an entity
+<<<<<<< HEAD
 		 * in service, which is disconnected from the active
+=======
+		 * under service, which is disconnected from the active
+>>>>>>> 298f825... Add different shedulers like BFQ - ZEN - .....
 		 * tree: it must be moved, too.
 		 * There is no need to put the sync queues, as the
 		 * scheduler has taken no reference.
@@ -776,11 +805,18 @@ static int bfqio_can_attach(struct cgroup *cgroup, struct cgroup_taskset *tset)
 		ioc = task->io_context;
 		if (ioc != NULL && atomic_read(&ioc->nr_tasks) > 1)
 			/*
+<<<<<<< HEAD
 			 * ioc == NULL means that the task is either too
 			 * young or exiting: if it has still no ioc the
 			 * ioc can't be shared, if the task is exiting the
 			 * attach will fail anyway, no matter what we
 			 * return here.
+=======
+			 * ioc == NULL means that the task is either too young or
+			 * exiting: if it has still no ioc the ioc can't be shared,
+			 * if the task is exiting the attach will fail anyway, no
+			 * matter what we return here.
+>>>>>>> 298f825... Add different shedulers like BFQ - ZEN - .....
 			 */
 			ret = -EINVAL;
 		task_unlock(task);
