@@ -1228,6 +1228,7 @@ static int __perf_remove_from_context(void *info)
 	return 0;
 }
 
+#if 0
 #ifdef CONFIG_SMP
 static void perf_retry_remove(struct perf_event *event)
 {
@@ -1249,6 +1250,7 @@ static void perf_retry_remove(struct perf_event *event)
 static void perf_retry_remove(struct perf_event *event)
 {
 }
+#endif
 #endif
 
 /*
@@ -1272,7 +1274,6 @@ static void perf_remove_from_context(struct perf_event *event, bool detach_group
 		.event = event,
 		.detach_group = detach_group,
 	};
-	int ret;
 
 	lockdep_assert_held(&ctx->mutex);
 
