@@ -4,10 +4,10 @@
 
 struct mnt_namespace {
 	atomic_t		count;
-	unsigned int            proc_inum;
+	unsigned int		proc_inum;
 	struct mount *	root;
 	struct list_head	list;
-	 struct user_namespace   *user_ns;
+	struct user_namespace	*user_ns;
 	u64			seq;	/* Sequence number to prevent loops */
 	wait_queue_head_t poll;
 	int event;
@@ -60,6 +60,12 @@ static inline struct mount *real_mount(struct vfsmount *mnt)
 static inline int mnt_has_parent(struct mount *mnt)
 {
 	return mnt != mnt->mnt_parent;
+}
+
+static inline int is_mounted(struct vfsmount *mnt)
+{
+	/* neither detached nor internal? */
+	return !IS_ERR_OR_NULL(real_mount(mnt));
 }
 
 extern struct mount *__lookup_mnt(struct vfsmount *, struct dentry *, int);
