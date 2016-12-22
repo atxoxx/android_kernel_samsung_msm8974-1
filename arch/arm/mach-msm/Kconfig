@@ -2031,14 +2031,6 @@ config MACH_KLTE_CAN
         bool "Samsung model KLTE_CAN"
         help
           Support for Samsung KLTE_CAN device.
-          
-+config BRICKED_HOTPLUG
-	bool "Enable kernel based mpdecision"
-	depends on MSM_RUN_QUEUE_STATS
-	default y
-	help
-	 This enables kernel based multi core control.
-	 (up/down hotplug based on load)
 
 config MACH_KLTE_MAX77828_JPN
         default n
